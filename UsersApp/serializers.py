@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from TransactionApp.serializers import TransactionSerializer
+from TransactionsApp.serializers import TransactionSerializer
 from django.contrib.auth.models import User
 
 

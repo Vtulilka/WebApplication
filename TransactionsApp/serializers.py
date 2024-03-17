@@ -5,5 +5,5 @@ from .models import Transaction
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['id', 'Owner', 'transactionDate', 'transactionType', 'amount']
+        fields = ['id', 'ownerId', 'date', 'type', 'amount']
 
