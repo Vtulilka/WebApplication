@@ -3,9 +3,7 @@ from TransactionApp.serializers import TransactionSerializer
 from django.contrib.auth.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
-    transactions = serializers.TransactionSerializer(many=True, read_only=True)
-    
+class UserSerializer(serializers.ModelSerializer):  
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'transactions']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
