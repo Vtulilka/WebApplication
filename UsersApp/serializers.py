@@ -45,7 +45,7 @@ class LoginSerializer(serializers.Serializer):
 
             # Пользователь не прошёл аутентификацию
             if not user:
-                msg = f'Access denied: wrong username or password. {password}'
+                msg = 'Access denied: wrong username or password.'
                 raise serializers.ValidationError(msg, code='authorization')
         else:
             # В запросе не переданы данные для аутентификации

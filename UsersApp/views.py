@@ -27,7 +27,7 @@ class UserViewSet(viewsets.ModelViewSet):
         data = request.data
         serializer = serializers.SignUpSerializer(data=data)
         
-        if serializer.is_valid(raise_exceptions=True):
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
         
         return Response(serializer.data)
