@@ -11,7 +11,6 @@ router.register(r'transactions', TransactionViewSet, basename='transaction')
 router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls, name='admin'),
-    path('api-auth/', include('rest_framework.urls')),
 ]
