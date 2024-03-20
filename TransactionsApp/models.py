@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 class Transaction(models.Model):
     ownerId = models.ForeignKey('auth.User', related_name='transactions', on_delete=models.CASCADE)
     date = models.DateTimeField()
@@ -8,7 +8,7 @@ class Transaction(models.Model):
     amount = models.IntegerField()
 
     def __str__(self):
-        return f'Owner: {self.OwnerId}, \
-            Date: {self.Date}, \
-            Type: {self.Type}, \
+        return f'Owner: {self.ownerId}, \
+            Date: {self.date}, \
+            Type: {self.type}, \
             Amount: {self.amount}'
