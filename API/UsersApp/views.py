@@ -1,6 +1,6 @@
 from rest_framework import mixins, viewsets, permissions, status
 from rest_framework.decorators import action, permission_classes
-from permissions import NotAuthorizedPermission
+from .permissions import NotAuthorizedPermission
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
@@ -10,7 +10,7 @@ from . import serializers
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
     permission_classes=[permissions.IsAuthenticated, ]
-    permission_classes_by_action = {'create': [NotAuthorizedPermission, permissions.IsAdminUser],
+    permission_classes_by_action = {'create': [NotAuthorizedPermission, ],
                                     'login': [NotAuthorizedPermission, ],
                                     'list': [permissions.IsAdminUser, ], }
 
@@ -23,11 +23,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
         if not self.request.user.is_staff:
             user = self.request.user
-            qs = User.objects.filter(ownerId=user)
+            qs = User.objects.filter(id=user.id)
         else:
             qs = User.objects.all()
         
-        return qs.filter(id>=start_at_id)
+        return qs.filter(id__gte=start_at_id)
 
     def get_permissions(self):
         try: 
@@ -37,11 +37,12 @@ class UserViewSet(viewsets.ModelViewSet):
         
     def create(self, request):
         data = request.data
+
         serializer = serializers.SignUpSerializer(data=data)
         
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-        
+
         return Response(serializer.data)
 
     @action(detail=False, 

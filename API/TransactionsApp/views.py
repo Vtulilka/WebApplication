@@ -15,9 +15,9 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         if not self.request.user.is_staff:
             user = self.request.user
-            return Transaction.objects.filter(ownerId=user).filter(id>=start_at_id)
+            return Transaction.objects.filter(ownerId=user.id).filter(id__gte=start_at_id)
         else:
-            return Transaction.objects.filter(id>=start_at_id)
+            return Transaction.objects.filter(id__gte=start_at_id)
     
     # Список транзакций
     def list(self, request):
@@ -31,5 +31,3 @@ class TransactionViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(queryset[:transactions_requested], many=True)
 
         return Response(serializer.data)
-    
-    
