@@ -12,7 +12,24 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = { 
             'password': { 'write_only': True },
             'id': { 'read_only': True },
-            }
+            }        
+        
+    def validate(self, attrs):
+        if 'username' in attrs:
+            username_is_changed = attrs['username'] != self.context['request'].user.username
+            username_exists = User.objects.filter(username=attrs['username']).exists()
+
+            if username_is_changed and username_exists:
+                raise ValidationError('Error: username already exists')
+            
+        if 'email' in attrs:
+            email_is_changed = attrs['email'] != self.context['request'].user.email
+            email_exists = User.objects.filter(email=attrs['email']).exists()
+
+            if email_is_changed and email_exists:
+                raise ValidationError('Error: email already exists')
+        
+        return super().validate(attrs)
 
 
 class LoginSerializer(serializers.Serializer):
@@ -37,7 +54,7 @@ class LoginSerializer(serializers.Serializer):
                 try:
                     user = User.objects.get(email=username)
                 except ObjectDoesNotExist:
-                    pass
+                    user = None
             else:
                 user = authenticate(request=self.context['request'],
                         username=username, 
@@ -49,7 +66,7 @@ class LoginSerializer(serializers.Serializer):
                 raise serializers.ValidationError(msg, code='authorization')
         else:
             # В запросе не переданы данные для аутентификации
-            msg = 'Both "username" and "password" are required.'
+            msg = 'Both username/email and password are required.'
             raise serializers.ValidationError(msg, code='authorization')
         
         attrs['user'] = user
