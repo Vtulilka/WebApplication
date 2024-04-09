@@ -14,8 +14,18 @@ class UserViewSet(viewsets.ModelViewSet):
 
     # Получение данных только о текущем пользователе
     def get_queryset(self):
-        user = self.request.user
-        return User.objects.filter(id=user.id)
+
+        start_at_id = 0
+        if 'start_at_id' in self.request.data:
+            start_at_id = int(self.request.data['start_at_id'])
+
+        if not self.request.user.is_staff:
+            user = self.request.user
+            qs = User.objects.filter(ownerId=user)
+        else:
+            qs = User.objects.all()
+        
+        return qs.filter(id>=start_at_id)
 
     def get_permissions(self):
         try: 
