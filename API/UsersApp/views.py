@@ -1,5 +1,6 @@
 from rest_framework import mixins, viewsets, permissions, status
 from rest_framework.decorators import action, permission_classes
+from permissions import NotAuthorizedPermission
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
@@ -9,8 +10,9 @@ from . import serializers
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
     permission_classes=[permissions.IsAuthenticated, ]
-    permission_classes_by_action = {'create': [permissions.AllowAny],
-                                    'login': [permissions.AllowAny]}
+    permission_classes_by_action = {'create': [NotAuthorizedPermission, permissions.IsAdminUser],
+                                    'login': [NotAuthorizedPermission, ],
+                                    'list': [permissions.IsAdminUser, ], }
 
     # Получение данных только о текущем пользователе
     def get_queryset(self):
@@ -43,8 +45,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, 
-            methods=['post'],
-            permission_classes=[permissions.AllowAny, ])
+            methods=['post'])
     def login(self, request):
         serializer = serializers.LoginSerializer(data=self.request.data,
             context={ 'request': self.request })
