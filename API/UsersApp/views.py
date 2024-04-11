@@ -16,10 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     # Получение данных только о текущем пользователе
     def get_queryset(self):
-
-        start_at_id = 0
-        if 'start_at_id' in self.request.data:
-            start_at_id = int(self.request.data['start_at_id'])
+        start_at_id = int(self.request.GET.get('start_at_id') or 0)
 
         if not self.request.user.is_staff:
             user = self.request.user

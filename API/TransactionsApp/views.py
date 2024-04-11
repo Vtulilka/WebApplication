@@ -9,9 +9,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     # Получение данных только о текущем пользователе
     def get_queryset(self):
-        start_at_id = 0
-        if 'start_at_id' in self.request.data:
-            start_at_id = int(self.request.data['start_at_id'])
+        start_at_id = int(self.request.GET.get('start_at_id') or 0)
 
         if not self.request.user.is_staff:
             user = self.request.user
@@ -23,11 +21,10 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def list(self, request):
         queryset = self.get_queryset()
 
-        transactions_requested = min(100, queryset.count())
-        if 'transactions_requested' in self.request.data:
-            transactions_requested = min(transactions_requested, 
-                                         int(self.request.data['transactions_requested']))
-        
+        transactions_requested = int(request.GET.get('transactions_requested') or 0)
+        if transactions_requested <= 0 or transactions_requested > 100:
+            transactions_requested = 100
+
         serializer = self.serializer_class(queryset[:transactions_requested], many=True)
 
         return Response(serializer.data)

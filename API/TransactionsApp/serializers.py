@@ -8,12 +8,16 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = ['id', 'ownerId', 'date', 'type', 'amount']
         extra_kwargs = {
             'id': { 'read_only': True },
-            'ownerId': {'read_only': True},
+            'ownerId': { 'read_only': True }
         }
 
-    def validate(self, attrs):
-        print(self.context['request'].user.id)
-        if not self.context['request'].user.is_staff:
-            attrs['ownerId'] = self.context['request'].user
+    def validate(self, data):
+        amount = int(data.get('amount') or 0)
+        if amount <= 0:
+            raise serializers.ValidationError('Incorrect amount')
         
-        return super().validate(attrs)   
+        type = int(data.get('type') or 0)
+        if type <= 0:
+            raise serializers.ValidationError('Incorrect type')
+        
+        return data

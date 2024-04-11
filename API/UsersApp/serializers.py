@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from TransactionsApp.serializers import TransactionSerializer
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserSerializer(serializers.ModelSerializer):  
@@ -14,22 +13,22 @@ class UserSerializer(serializers.ModelSerializer):
             'id': { 'read_only': True },
             }        
         
-    def validate(self, attrs):
-        if 'username' in attrs:
-            username_is_changed = attrs['username'] != self.context['request'].user.username
-            username_exists = User.objects.filter(username=attrs['username']).exists()
+    def validate(self, data):
+        if 'username' in data:
+            username_is_changed = data['username'] != self.context['request'].user.username
+            username_exists = User.objects.filter(username=data['username']).exists()
 
             if username_is_changed and username_exists:
-                raise ValidationError('Error: username already exists')
+                raise serializers.ValidationError('Username already exists')
             
-        if 'email' in attrs:
-            email_is_changed = attrs['email'] != self.context['request'].user.email
-            email_exists = User.objects.filter(email=attrs['email']).exists()
+        if 'email' in data:
+            email_is_changed = data['email'] != self.context['request'].user.email
+            email_exists = User.objects.filter(email=data['email']).exists()
 
             if email_is_changed and email_exists:
-                raise ValidationError('Error: email already exists')
+                raise serializers.ValidationError('Email already exists')
         
-        return super().validate(attrs)
+        return data
 
 
 class LoginSerializer(serializers.Serializer):
@@ -44,9 +43,9 @@ class LoginSerializer(serializers.Serializer):
         write_only=True
     )
     
-    def validate(self, attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
         
         # Проверка имени пользователя и пароля
         if username and password:
@@ -69,8 +68,8 @@ class LoginSerializer(serializers.Serializer):
             msg = 'Both username/email and password are required.'
             raise serializers.ValidationError(msg, code='authorization')
         
-        attrs['user'] = user
-        return attrs
+        data['user'] = user
+        return data
     
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -82,16 +81,16 @@ class SignUpSerializer(serializers.ModelSerializer):
             'id': { 'read_only': True },
             }
         
-    def validate(self, attrs):
-        email_exists = User.objects.filter(email=attrs['email']).exists()
+    def validate(self, data):
+        email_exists = User.objects.filter(email=data['email']).exists()
         if email_exists:
-            raise ValidationError('Error: email already exists')
+            raise serializers.ValidationError('Error: email already exists')
         
-        username_exists = User.objects.filter(username=attrs['username']).exists()
+        username_exists = User.objects.filter(username=data['username']).exists()
         if username_exists:
-            raise ValidationError('Error: username already exists')
+            raise serializers.ValidationError('Error: username already exists')
         
-        return super().validate(attrs)
+        return data
 
     def create(self, validated_data):
         password = validated_data.pop('password')
