@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2s9@xm^ss&9i-nb@7itf)3579h7f%h-1-6@1*v9rm+w)=yxw!-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'TransactionsApp',
     'UsersApp',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,8 @@ REST_FRAMEWORK = {
     ),
     'NON_FIELD_ERRORS_KEY': 'Error',
 }
+
+# Tagging
+# https://django-taggit.readthedocs.io/en/latest/getting_started.html#settings
+
+TAGGIT_CASE_INSENSITIVE = True
