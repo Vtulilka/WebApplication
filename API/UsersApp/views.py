@@ -1,5 +1,5 @@
-from rest_framework import mixins, viewsets, permissions, status
-from rest_framework.decorators import action, permission_classes
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
 from .permissions import NotAuthorizedPermission
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -40,7 +40,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, 
             methods=['post'])

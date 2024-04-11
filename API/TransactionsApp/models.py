@@ -1,4 +1,5 @@
 from django.db import models
+from taggit.managers import TaggableManager
 
 
 class Transaction(models.Model):
@@ -6,6 +7,7 @@ class Transaction(models.Model):
     date = models.DateTimeField()
     type = models.CharField(max_length=100)
     amount = models.IntegerField()
+    tags = TaggableManager()
 
     def __str__(self):
         return f'Owner: {self.ownerId}, \
