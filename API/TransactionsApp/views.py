@@ -10,22 +10,28 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, ]
     serializer_class = TransactionSerializerDetail
 
-    # Получение данных только о текущем пользователе
+    # Получение данных
     def get_queryset(self):
         start_at_id = int(self.request.GET.get('start_at_id') or 0)
-
+        queryset = Transaction.objects.filter(id__gte=start_at_id)
+        
+        user = self.request.user
         if not self.request.user.is_staff:
-            user = self.request.user
-            return Transaction.objects.filter(owner_id=user.id).filter(id__gte=start_at_id)
-        else:
-            return Transaction.objects.filter(id__gte=start_at_id)
+            queryset = queryset.filter(owner_id=user.id) 
+
+        requested_user_tags = self.request.query_params.getlist('user_tags') or None
+        if requested_user_tags:
+            for tag in requested_user_tags:
+                queryset = queryset.filter(user_tags__name__iexact=tag).distinct()
+
+        return queryset
     
     # Список транзакций
     def list(self, request):
         queryset = self.get_queryset()
         serializer_class = TransactionSerializerGeneric
 
-        transactions_requested = int(request.GET.get('transactions_requested') or 0)
+        transactions_requested = int(request.query_params.get('transactions_requested') or 0)
         if transactions_requested <= 0 or transactions_requested > 100:
             transactions_requested = 100
 
