@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from . import serializers
+from django.core import exceptions
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -57,3 +58,21 @@ class UserViewSet(viewsets.ModelViewSet):
     def logout(self, request):
         logout(request)
         return Response(None, status=status.HTTP_200_OK)
+
+    @action(detail=False,
+            methods=['post'])
+    def change_password(self, request):
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        if not old_password or not new_password:
+            raise exceptions.BadRequest('Both old and new password must be provided')
+        
+        user = request.user    
+        if not user.check_password(old_password):
+            raise exceptions.PermissionDenied('Permission denied')
+        user.set_password(new_password)
+        user.save()
+
+        return Response(None, status=status.HTTP_202_ACCEPTED)
+
+
