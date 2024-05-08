@@ -6,13 +6,10 @@ class TransactionSerializerGeneric(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ['id', 
-                  'owner_id', 
                   'amount', 
-                  'date', 
                   'type']
         extra_kwargs = {
-            'id': { 'read_only': True },
-            'owner_id' : { 'read_only': True }
+            'id': { 'read_only': True }
         }
 
 
