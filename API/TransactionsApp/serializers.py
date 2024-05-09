@@ -6,13 +6,10 @@ class TransactionSerializerGeneric(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ['id', 
-                  'owner_id', 
                   'amount', 
-                  'date', 
-                  'type']
+                  'is_expense']
         extra_kwargs = {
-            'id': { 'read_only': True },
-            'owner_id' : { 'read_only': True }
+            'id': { 'read_only': True }
         }
 
 
@@ -21,14 +18,7 @@ class TransactionSerializerDetail(TaggitSerializer, serializers.ModelSerializer)
 
     class Meta:
         model = Transaction
-        fields = ['id', 
-                  'owner_id', 
-                  'amount', 
-                  'date', 
-                  'type', 
-                  'category_id', 
-                  'description', 
-                  'user_tags']
+        fields = '__all__'
         extra_kwargs = {
             'id': { 'read_only': True },
             'owner_id' : { 'read_only': True },
@@ -38,13 +28,15 @@ class TransactionSerializerDetail(TaggitSerializer, serializers.ModelSerializer)
         }
 
     def validate(self, data):
-        amount = int(data.get('amount') or 0)
-        if amount <= 0:
-            raise serializers.ValidationError('Incorrect amount')
+        amount = data.get('amount') or None
+        if amount:
+            if int(amount) <= 0:
+                raise serializers.ValidationError('Incorrect amount')
         
-        type = data.get('type') or None
-        if type not in ['Expense', 'Income']:
-            raise serializers.ValidationError('Incorrect type')
+        is_expense = data.get('is_expense') or None
+        if is_expense:
+            if is_expense not in [True, False]:
+                raise serializers.ValidationError('Incorrect type')
         
         user_tags = data.get('user_tags') or None
         method = self.context['request'].method
@@ -55,9 +47,19 @@ class TransactionSerializerDetail(TaggitSerializer, serializers.ModelSerializer)
         if owner_id:
             raise serializers.ValidationError('Cannot update owner_id')
         
-        category_id = data.get('category_id') or None
-        if category_id and not Category.objects.filter(id=category_id).exists():
+        category = data.get('category_id') or None
+        if category and not Category.objects.filter(id=category.id).exists():
             raise serializers.ValidationError('Incorrect category')
         
         data['owner_id'] = self.context['request'].user
         return data
+    
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = [
+            'id', 
+            'name', 
+            'description'
+        ]
