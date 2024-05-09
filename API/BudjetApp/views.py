@@ -38,14 +38,4 @@ class BudjetViewSet(viewsets.ModelViewSet):
             serializer.save()
 
         return Response(data, status=status.HTTP_201_CREATED)
-    
-    def update(self, request, pk=None):
-        data = request.data
-        data['owner_id'] = request.user.id
 
-        serializer = self.serializer_class(data=data,
-                                           context={ 'requst': self.request })
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-
-        return Response(data, status=status.HTTP_202_ACCEPTED)

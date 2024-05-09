@@ -30,8 +30,8 @@ class BudjetSerializerDetail(serializers.ModelSerializer):
         }
 
     def validate(self, data):
-        amount = int(data.get('amount') or 0)
-        if amount <= 0:
+        amount = data.get('amount')
+        if amount and amount <= 0:
             raise serializers.ValidationError('Incorrect amount')
         
         owner_id = data.get('owner_id') or None
@@ -40,7 +40,7 @@ class BudjetSerializerDetail(serializers.ModelSerializer):
         
         start_date = data.get('start_date') or None
         end_date = data.get('end_date') or None
-        if not(start_date and end_date) or start_date >= end_date:
+        if start_date and end_date and start_date >= end_date:
             raise serializers.ValidationError('Wrong dates')
         
         data['owner_id'] = self.context['request'].user
