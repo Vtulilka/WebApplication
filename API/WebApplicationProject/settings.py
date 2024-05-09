@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'TransactionsApp',
     'UsersApp',
     'BudjetApp',
+    'ReportsApp',
     'taggit',
 ]
 
