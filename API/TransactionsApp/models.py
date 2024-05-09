@@ -6,7 +6,7 @@ class Transaction(models.Model):
     owner_id = models.ForeignKey('auth.User', related_name='transactions', on_delete=models.CASCADE)
     amount = models.IntegerField()
     date = models.DateTimeField()
-    type = models.CharField(max_length=20)
+    is_expense = models.BooleanField(default=False)
     category_id = models.ForeignKey('Category', null=True, related_name='transactions', on_delete=models.CASCADE)
     description = models.CharField(max_length=200, default='')
     user_tags = TaggableManager(blank=True)
@@ -16,10 +16,10 @@ class Transaction(models.Model):
         return f'Owner: {self.owner_id}, \
             Amount: {self.amount}, \
             Date: {self.date}, \
-            Type: {self.type}, \
-            Category: {self.category}, \
+            Is expense: {self.is_expense}, \
+            Category: {self.category_id}, \
             Description: {self.description}, \
-            Tags: {self.tags}'
+            Tags: {self.user_tags}'
     
 
 class Category(models.Model):
