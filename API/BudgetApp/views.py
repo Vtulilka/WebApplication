@@ -1,17 +1,17 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from .models import Budjet
-from .serializers import BudjetSerializerDetail, BudjetSerializerGeneric
+from .models import Budget
+from .serializers import BudgetSerializerDetail, BudgetSerializerGeneric
 
 
-class BudjetViewSet(viewsets.ModelViewSet):
+class BudgetViewSet(viewsets.ModelViewSet):
     permission_classes = [ permissions.IsAuthenticated, ]
-    serializer_class = BudjetSerializerDetail
+    serializer_class = BudgetSerializerDetail
 
     # Получение данных
     def get_queryset(self):
         start_at_id = int(self.request.GET.get('start_at_id') or 0)
-        queryset = Budjet.objects.filter(id__gte=start_at_id)
+        queryset = Budget.objects.filter(id__gte=start_at_id)
         
         user = self.request.user
         if not self.request.user.is_staff:
@@ -22,7 +22,7 @@ class BudjetViewSet(viewsets.ModelViewSet):
     # Список бюджетов
     def list(self, request):
         queryset = self.get_queryset()
-        serializer_class = BudjetSerializerGeneric
+        serializer_class = BudgetSerializerGeneric
 
         serializer = serializer_class(queryset[:10], many=True)
 

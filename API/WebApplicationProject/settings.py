@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'TransactionsApp',
     'UsersApp',
-    'BudjetApp',
+    'BudgetApp',
     'ReportsApp',
     'taggit',
 ]

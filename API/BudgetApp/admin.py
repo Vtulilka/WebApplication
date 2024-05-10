@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Budjet
+from .models import Budget
 
 # Register your models here.
-admin.site.register(Budjet)
+admin.site.register(Budget)
