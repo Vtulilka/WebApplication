@@ -45,11 +45,13 @@ INSTALLED_APPS = [
     'taggit',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'UsersApp.middleware.RequestLogMiddleWare',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -144,3 +146,32 @@ REST_FRAMEWORK = {
 # https://django-taggit.readthedocs.io/en/latest/getting_started.html#settings
 
 TAGGIT_CASE_INSENSITIVE = True
+
+# # ДЛЯ НАСТРОЙКИ СЕРВЕРА
+# # CORS
+
+# CORS_ALLOWED_ORIGINS = [
+#     'https://red-esmaria-22.tiiny.site'
+#     ]
+
+# CORS_ALLOW_CREDENTIALS = True
+
+# CORS_EXPOSE_HEADERS = [
+#     'Set-Cookie',
+#     'csrftoken'
+#     ]
+
+# # CSRF
+
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://red-esmaria-22.tiiny.site',
+#     'http://red-esmaria-22.tiiny.site'
+#     ]
+
+# CSRF_COOKIE_SAMESITE = 'None'
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_HTTPONLY = False
+# CSRF_USE_SESSIONS = False
+
+# SESSION_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_SECURE = True
