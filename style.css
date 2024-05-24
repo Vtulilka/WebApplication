@@ -1,0 +1,160 @@
+/* registration */
+
+#registration-body {
+    background: linear-gradient(rgb(125, 195, 99), #cfc731) fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110vh;
+    margin: 0;
+}
+
+.registration-container {
+    height: 500px;
+    width: 700px;
+    padding: 25px;
+    border-radius: 15px;
+    background: #fff;
+}
+
+.title {
+    text-decoration: none;
+    font-family: Consolas;
+    font-size: 30px;
+    color: rgb(125, 195, 99);
+    margin-left: 35px;
+    margin-bottom: 15px;
+}
+
+.form-label {
+    text-align: left;
+    margin-left: 30px;
+    font-family: Consolas;
+    font-size: 30px;
+    color: #7e6c11;
+}
+
+.input-field {
+    width: 600px;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-left: 35px;
+    margin-right: 35px;
+    border: 2px solid black;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    width: 600px;
+    padding: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 35px;
+    margin-right: 35px;
+    background-color: rgb(125, 195, 99);
+    color: #7e6c11;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+
+/* authorization */
+
+#authorization-body {
+    background: linear-gradient(rgb(125, 195, 99), #cfc731) fixed;
+}
+
+.login-form {
+    position: absolute;
+    top: 80px;
+    left: 100px;
+    width: 330px;
+    height: 500px;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f2f2f2;
+}
+
+.form-title {
+    text-align: center;
+    width: 100%;
+    height: 10%;
+    font-family: Consolas;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    text-align: left;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-family: Consolas;
+    font-size: 15px;
+}
+
+.form-link {
+    text-align: end;
+    font-family: Consolas;
+    font-size: 12px;
+    color: rgb(125, 195, 99);
+}
+
+.input-login {
+    width: 100%;
+    padding: 20px;
+    height: 40px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 2px solid #000000;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+.form-remember {
+    display: flex;
+    align-items: center;
+}
+
+.input-checkbox {
+    margin-right: 10px;
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 2px solid #000000;
+    font-weight: bold;
+    border-radius: 0;
+}
+
+.checkbox-label {
+    font-family: Consolas;
+    font-size: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.checkbox-text {
+    font-weight: bold;
+}
+
+.form-links {
+    margin-top: 30px;
+}
+
+.info-box {
+    position: absolute;
+    top: 80px;
+    left: 550px;
+    width: 450px;
+    height: 500px;
+    padding: 20px;
+    background-color: rgba(242, 242, 242, 0.7);
+    border-radius: 10px;
+    font-family: Consolas;
+}
