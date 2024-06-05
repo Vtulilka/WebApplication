@@ -32,6 +32,7 @@ class ReportBudgetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Budget
         fields = ['id', 
+                  'name'
                   'amount', 
                   'start_date',
                   'end_date'

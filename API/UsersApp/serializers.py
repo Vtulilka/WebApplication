@@ -5,6 +5,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserSerializer(serializers.ModelSerializer):  
+    first_name = serializers.CharField(max_length=150, required=True)
+    last_name = serializers.CharField(max_length=150, required=True)
+    email = serializers.EmailField(max_length=150, required=True)
+    
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', ]

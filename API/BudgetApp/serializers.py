@@ -6,7 +6,10 @@ class BudgetSerializerGeneric(serializers.ModelSerializer):
         model = Budget
         fields = [
             'id',  
-            'amount'
+            'name',
+            'amount',
+            'start_date',
+            'end_date'
         ]
         extra_kwargs = {
             'id': { 'read_only': True }
