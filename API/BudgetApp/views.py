@@ -30,7 +30,6 @@ class BudgetViewSet(viewsets.ModelViewSet):
     
     def create(self, request):
         data = request.data
-        data['owner_id'] = request.user.id
 
         serializer = self.serializer_class(data=data,
                                            context={ 'request': self.request })

@@ -41,7 +41,6 @@ class TransactionViewSet(viewsets.ModelViewSet):
     
     def create(self, request):
         data = request.data
-        data['owner_id'] = request.user.id
 
         serializer = self.serializer_class(data=data,
                                            context={ 'request': self.request })
@@ -58,26 +57,26 @@ class TagViewset(viewsets.GenericViewSet):
     @action(detail=True,
             methods=['patch'])
     def add_tag(self, request, pk=None):
-        request_tags = [tag.strip() for tag in request.data['user_tags']]
-        if not all([tag for tag in request_tags]): 
+        tag = request.data['user_tags'].strip()
+        if not tag: 
             raise serializers.ValidationError('Incorrect tag name')
         
         transaction = self.get_object()
-        for tag in request_tags:
-            transaction.user_tags.add(tag)
+        transaction.user_tags.add(tag)
 
         return Response({'user_tags': transaction.user_tags.names()}, status=status.HTTP_206_PARTIAL_CONTENT)
 
     @action(detail=True,
             methods=['patch'])
     def remove_tag(self, request, pk=None):
-        user_tags = [t.strip() for t in request.data['user_tags']]
-        if not all([t for t in tags]): 
+        transaction = self.get_object()
+        
+        tag = request.data['user_tags'].strip()
+        if not tag or tag not in transaction.user_tags.names():
             raise serializers.ValidationError('Incorrect tag name')
         
-        transaction = self.get_object()
-        for tag in user_tags:
-            transaction.tags.remove(tag)
+        
+        transaction.user_tags.remove(tag)
 
         return Response({'user_tags': transaction.user_tags.names()}, status=status.HTTP_206_PARTIAL_CONTENT)
 
