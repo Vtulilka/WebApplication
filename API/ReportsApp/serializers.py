@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.db import models
 from TransactionsApp.models import Transaction, Category
 from django.db.models import Sum
-from BudjetApp.models import Budjet
+from BudgetApp.models import Budget
 
 class ReportTransactionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,10 +28,11 @@ class ReportCategorySerializer(serializers.ModelSerializer):
     def get_total_amount(self, object):
         return object['total_amount']
 
-class ReportBudjetSerializer(serializers.ModelSerializer):
+class ReportBudgetSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Budjet
+        model = Budget
         fields = ['id', 
+                  'name'
                   'amount', 
                   'start_date',
                   'end_date'
@@ -63,12 +64,12 @@ class ReportPeriodSerializer(serializers.Serializer):
         return object['end_date']
 
 
-class ReportBudjetSerializer(serializers.Serializer):
+class ReportBudgetSerializer(serializers.Serializer):
     owner_id = serializers.SerializerMethodField()
     remainder = serializers.SerializerMethodField()
     total_income = serializers.SerializerMethodField()
     total_expense = serializers.SerializerMethodField()
-    budjet = ReportBudjetSerializer()
+    budget = ReportBudgetSerializer()
     
     def get_total_income(self, object):
         return object['total_income']

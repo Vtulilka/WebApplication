@@ -51,7 +51,9 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+
+        user_serializer = serializers.UserSerializer(instance=user)
+        return Response(user_serializer.data, status=status.HTTP_202_ACCEPTED)
     
     @action(detail=False, 
             methods=['get'])

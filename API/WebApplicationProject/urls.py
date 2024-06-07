@@ -5,14 +5,14 @@ from rest_framework.routers import DefaultRouter
 
 from TransactionsApp.views import TransactionViewSet, TagViewset, tags
 from UsersApp.views import UserViewSet
-from BudjetApp.views import BudjetViewSet
+from BudgetApp.views import BudgetViewSet
 from ReportsApp.views import ReportViewSet
 
 router = DefaultRouter()
 router.register(r'transactions', TransactionViewSet, basename='transactions')
 router.register(r'transactions', TagViewset, basename='transaction-tags')
 router.register(r'users', UserViewSet, basename='users')
-router.register(r'budjets', BudjetViewSet, basename='budjets')
+router.register(r'budgets', BudgetViewSet, basename='budgets')
 router.register(r'reports', ReportViewSet, basename='reports')
 
 urlpatterns = [

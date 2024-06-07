@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from TransactionsApp.models import Transaction, Category
 from rest_framework.decorators import action, api_view, permission_classes
 from django.db.models import Sum, OuterRef, Subquery, F
-from .serializers import ReportPeriodSerializer, ReportBudjetSerializer
-from BudjetApp.models import Budjet
+from .serializers import ReportPeriodSerializer, ReportBudgetSerializer
+from BudgetApp.models import Budget
 
 
 class ReportViewSet(viewsets.GenericViewSet):
@@ -58,28 +58,28 @@ class ReportViewSet(viewsets.GenericViewSet):
 
     @action(detail=False,
             methods=['get'])
-    def budjet(self, request):
-        serializer_class = ReportBudjetSerializer
+    def budget(self, request):
+        serializer_class = ReportBudgetSerializer
 
-        budjet_id = self.request.GET.get('budjet_id')
-        budjet_obj = Budjet.objects.get(id=budjet_id)
-        if not budjet_obj:
-            raise serializers.ValidationError('Should specify correct budjet_id')
+        budget_id = self.request.GET.get('budget_id')
+        budget_obj = Budget.objects.get(id=budget_id)
+        if not budget_obj:
+            raise serializers.ValidationError('Should specify correct budget_id')
         
         owner_id = self.request.user.id
-        start_date = budjet_obj.start_date
-        end_date = budjet_obj.end_date
+        start_date = budget_obj.start_date
+        end_date = budget_obj.end_date
 
         transactions = Transaction.objects.filter(owner_id=owner_id,
                                                   date__gte=start_date,
                                                   date__lte=end_date)
         total_income = transactions.filter(is_expense=False).aggregate(s=Sum('amount'))['s'] or 0
         total_expense = transactions.filter(is_expense=True).aggregate(s=Sum('amount'))['s'] or 0
-        remainder = min(max(budjet_obj.amount - total_expense + total_income, 0), budjet_obj.amount)
+        remainder = min(max(budget_obj.amount - total_expense + total_income, 0), budget_obj.amount)
 
         data = request.data
         data['owner_id'] = owner_id
-        data['budjet'] = budjet_obj
+        data['budget'] = budget_obj
         data['total_income'] = total_income
         data['total_expense'] = total_expense
         data['remainder'] = remainder

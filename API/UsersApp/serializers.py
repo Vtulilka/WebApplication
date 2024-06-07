@@ -5,6 +5,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserSerializer(serializers.ModelSerializer):  
+    first_name = serializers.CharField(max_length=150, required=True)
+    last_name = serializers.CharField(max_length=150, required=True)
+    email = serializers.EmailField(max_length=150, required=True)
+    
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', ]
@@ -14,14 +18,20 @@ class UserSerializer(serializers.ModelSerializer):
         
     def validate(self, data):
         if 'username' in data:
-            username_is_changed = data['username'] != self.context['request'].user.username
+            try:
+                username_is_changed = data['username'] != self.context['request'].user.username
+            except:
+                username_is_changed = data['username'] != self.context['request']['user'].username
             username_exists = User.objects.filter(username=data['username']).exists()
 
             if username_is_changed and username_exists:
                 raise serializers.ValidationError('Username already exists')
             
         if 'email' in data:
-            email_is_changed = data['email'] != self.context['request'].user.email
+            try:
+                email_is_changed = data['email'] != self.context['request'].user.email
+            except:
+                email_is_changed = data['email'] != self.context['request']['user'].email
             email_exists = User.objects.filter(email=data['email']).exists()
 
             if email_is_changed and email_exists:

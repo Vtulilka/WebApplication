@@ -1,21 +1,24 @@
 from rest_framework import serializers
-from .models import Budjet
+from .models import Budget
 
-class BudjetSerializerGeneric(serializers.ModelSerializer):
+class BudgetSerializerGeneric(serializers.ModelSerializer):
     class Meta:
-        model = Budjet
+        model = Budget
         fields = [
             'id',  
-            'amount'
+            'name',
+            'amount',
+            'start_date',
+            'end_date'
         ]
         extra_kwargs = {
             'id': { 'read_only': True }
         }
 
 
-class BudjetSerializerDetail(serializers.ModelSerializer):
+class BudgetSerializerDetail(serializers.ModelSerializer):
     class Meta:
-        model = Budjet
+        model = Budget
         fields = [
             'id', 
             'name', 

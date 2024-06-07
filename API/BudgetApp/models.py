@@ -2,8 +2,8 @@ from django.db import models
 
 # Create your models here.
 
-class Budjet(models.Model):
-    owner_id = models.ForeignKey('auth.User', related_name='budjets', on_delete=models.CASCADE)
+class Budget(models.Model):
+    owner_id = models.ForeignKey('auth.User', related_name='budgets', on_delete=models.CASCADE)
     amount = models.IntegerField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
